@@ -56,6 +56,22 @@ function App() {
       });
   }, []);
 
+  React.useEffect(() => {
+    const jwtToken = localStorage.getItem("jwt");
+    if (jwtToken) {
+      auth
+        .checkToken(jwtToken)
+        .then((res) => {
+          if (res) {
+            setEmailUser(res.data.email);
+            setLoggedIn(true);
+            navigate("/main", { replace: true });
+          }
+        })
+        .catch(console.error);
+    }
+  }, []);
+
   function handleCardLike(cardId, likes) {
     const isLiked = likes.some((i) => i._id === currentUser._id);
     api
@@ -127,21 +143,6 @@ function App() {
     setSelectedCard({});
   }
 
-  React.useEffect(() => {
-    const jwtToken = localStorage.getItem("token");
-    if (jwtToken) {
-      auth
-        .checkToken(jwtToken)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            navigate("/main", { replace: true });
-          }
-        })
-        .catch(console.error);
-    }
-  }, []);
-
   function handleRegister(email, password) {
     auth
       .register(email, password)
@@ -169,7 +170,6 @@ function App() {
       .then((res) => {
         localStorage.setItem("jwt", res.token);
         setLoggedIn(true);
-        setEmailUser(email);
         navigate("/main", { replace: true });
       })
       .catch(() => {
