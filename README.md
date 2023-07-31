@@ -11,5 +11,5 @@ Addition to the project: added registration and authorization. Added routers and
 ```
 - React
 - JavaScript
-- HTNL / CSS
+- HTML / CSS
 ```
